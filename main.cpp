@@ -2,6 +2,7 @@
 #include <vector>
 #include <random>
 #include <chrono>
+#define VCL_FASTEXP
 #include "vectorclass/vectorclass.h"
 #include "find_density.h"
 
@@ -11,7 +12,7 @@ double fRand(double fMin, double fMax) {
 }
 
 const int NMAX = 25000;
-const size_t LOOPS = 10;
+const size_t LOOPS = 10000;
 
 
 double a[NMAX + 10], b[NMAX + 10], c[NMAX + 10];
