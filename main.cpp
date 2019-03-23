@@ -17,7 +17,7 @@ double fRand(double fMin, double fMax) {
 
 constexpr const size_t NMAX = 25000;
 constexpr const size_t NMAXVEC = NMAX / 4;
-constexpr const size_t LOOPS = 1000;
+constexpr const size_t LOOPS = 1;
 
 
 double a[NMAX + 10], b[NMAX + 10], c[NMAX + 10];
@@ -143,30 +143,31 @@ int main() {
     cont.size_arg_result = 500;
     cont.size_mean_demen = 2500;
 
+    std::cout << "density_opt_0 time = " << get_time_of(solve_opt_0) << std::endl;
+    std::cout << "global_density_opt_0 time = " << get_time_of_2<double>(find_density_opt_0<double>, cont, 1) << std::endl;
 
-    std::cout << get_time_of_2<Vec4d>(find_density_opt_0<Vec4d>, cont, 1) << std::endl;
-    std::cout << get_time_of_2<Vec4d>(find_density_opt_1<Vec4d>, cont, 1) << std::endl;
-    std::cout << get_time_of_2<Vec4d>(find_density_opt_2<Vec4d>, cont, 1) << std::endl;
+    std::cout << "density_vec_opt_0 time = " << get_time_of(solve_vec_opt_0) << std::endl;
+    std::cout << "global_density_vec_opt_0 time = " << get_time_of_2<Vec4d>(find_density_opt_0<Vec4d>, cont, 1) << std::endl;
 
-    std::cout << get_time_of_2<double>(find_density_opt_0<double>, cont, 1) << std::endl;
-    std::cout << get_time_of_2<double>(find_density_opt_1<double>, cont, 1) << std::endl;
-    std::cout << get_time_of_2<double>(find_density_opt_2<double>, cont, 1) << std::endl;
 
-//    std::cout << "density_0 time = " << get_time_of(solve_0) << std::endl;
-//    std::cout << "density_vec_0 time = " << get_time_of(solve_vec_0) << std::endl;
-//    std::cout << "density_opt_0 time = " << get_time_of(solve_opt_0) << std::endl;
-//    std::cout << "density_vec_opt_0 time = " << get_time_of(solve_vec_opt_0) << std::endl;
-//    std::cout << "density_1 time = " << get_time_of(solve_1) << std::endl;
-//    std::cout << "density_vec_1 time = " << get_time_of(solve_vec_1) << std::endl;
-//    std::cout << "minus_density_opt_1 time = " << get_time_of(solve_what_opt_1) << std::endl;
-//    std::cout << "density_direct_opt_1 time = " << get_time_of(solve_direct_opt_1) << std::endl;
-//    std::cout << "density_opt_1 time = " << get_time_of(solve_opt_1) << std::endl;
-//    std::cout << "density_vec_opt_1 time = " << get_time_of(solve_vec_opt_1) << std::endl;
-//    std::cout << "density_vec_opt_unroll_1 time = " << get_time_of(solve_vec_opt_unroll_1) << std::endl;
-//    std::cout << "density_2 time = " << get_time_of(solve_2) << std::endl;
-//    std::cout << "density_vec_2 time = " << get_time_of(solve_vec_2) << std::endl;
-//    std::cout << "density_opt_2 time = " << get_time_of(solve_opt_2) << std::endl;
-//    std::cout << "density_vec_opt_2 time = " << get_time_of(solve_vec_opt_2) << std::endl;
+    std::cout << "density_opt_1 time = " << get_time_of(solve_opt_1) << std::endl;
+    std::cout << "global_density_opt_1 time = " << get_time_of_2<double>(find_density_opt_1<double>, cont, 1) << std::endl;
+
+    std::cout << "density_vec_opt_unroll_1 time = " << get_time_of(solve_vec_opt_unroll_1) << std::endl;
+    std::cout << "global_density_vec_opt_1 time = " << get_time_of_2<Vec4d>(find_density_opt_1<Vec4d>, cont, 1) << std::endl;
+
+
+    std::cout << "density_vec_opt_1 time = " << get_time_of(solve_vec_opt_1) << std::endl;
+    std::cout << "minus_density_opt_1 time = " << get_time_of(solve_what_opt_1) << std::endl;
+    std::cout << "density_direct_opt_1 time = " << get_time_of(solve_direct_opt_1) << std::endl;
+
+
+    std::cout << "density_opt_2 time = " << get_time_of(solve_opt_2) << std::endl;
+    std::cout << "global_density_opt_2 time = " << get_time_of_2<double>(find_density_opt_2<double>, cont, 1) << std::endl;
+
+    std::cout << "density_vec_opt_2 time = " << get_time_of(solve_vec_opt_2) << std::endl;
+    std::cout << "global_density_vec_opt_2 time = " << get_time_of_2<Vec4d>(find_density_opt_2<Vec4d>, cont, 1) << std::endl;
+    
     return 0;
 }
 
