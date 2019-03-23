@@ -17,8 +17,6 @@ double fRand(double fMin, double fMax) {
 
 constexpr const size_t NMAX = 25000;
 constexpr const size_t NMAXVEC = NMAX / 4;
-constexpr const size_t LOOPS = 1;
-
 
 double a[NMAX + 10], b[NMAX + 10], c[NMAX + 10];
 double ans[NMAX + 10];
@@ -41,85 +39,8 @@ void init() {
 }
 
 
-void solve_opt_0() {
-    for (size_t j = 0; j != NMAX; ++j)
-        ans[j] = find_density_opt_0<double>(a[j], b[j], c[j]);
-}
-
-
-void solve_vec_opt_0() {
-    for (size_t j = 0; j != NMAXVEC; ++j)
-        ansvec[j] = find_density_opt_0<Vec4d>(avec[j], bvec[j], cvec[j]);
-}
-
-
-void solve_opt_1() {
-    for (size_t j = 0; j != NMAX; ++j)
-        ans[j] = find_density_opt_1<double>(a[j], b[j], c[j]);
-}
-
-
-void solve_direct_opt_1() {
-    for (size_t j = 0; j != NMAX; ++j)
-        ans[j] = find_direct_density_opt_1<double>(a[j], b[j], c[j]);
-}
-
-
-void solve_what_opt_1() {
-    for (size_t j = 0; j != NMAX; ++j)
-        ans[j] = find_minus_density_opt_1<double>(a[j], b[j], c[j]);
-}
-
-
-void solve_vec_opt_1() {
-    for (size_t j = 0; j != NMAXVEC; ++j)
-        ansvec[j] = find_density_opt_1<Vec4d>(avec[j], bvec[j], cvec[j]);
-}
-
-
-void solve_vec_opt_unroll_1() {
-    constexpr const size_t block = 10;
-    static_assert(NMAXVEC % block == 0, "block must divide NMAXVEC");
-    for (size_t j = 0; j != NMAXVEC; j += 10) {
-        ansvec[j] = find_density_opt_1<Vec4d>(avec[j], bvec[j], cvec[j]);
-        ansvec[j + 1] = find_density_opt_1<Vec4d>(avec[j + 1], bvec[j + 1], cvec[j + 1]);
-        ansvec[j + 2] = find_density_opt_1<Vec4d>(avec[j + 2], bvec[j + 2], cvec[j + 2]);
-        ansvec[j + 3] = find_density_opt_1<Vec4d>(avec[j + 3], bvec[j + 3], cvec[j + 3]);
-        ansvec[j + 4] = find_density_opt_1<Vec4d>(avec[j + 4], bvec[j + 4], cvec[j + 4]);
-        ansvec[j + 5] = find_density_opt_1<Vec4d>(avec[j + 5], bvec[j + 5], cvec[j + 5]);
-        ansvec[j + 6] = find_density_opt_1<Vec4d>(avec[j + 6], bvec[j + 6], cvec[j + 6]);
-        ansvec[j + 7] = find_density_opt_1<Vec4d>(avec[j + 7], bvec[j + 7], cvec[j + 7]);
-        ansvec[j + 8] = find_density_opt_1<Vec4d>(avec[j + 8], bvec[j + 8], cvec[j + 8]);
-        ansvec[j + 9] = find_density_opt_1<Vec4d>(avec[j + 9], bvec[j + 9], cvec[j + 9]);
-    }
-}
-
-
-void solve_opt_2() {
-    for (size_t j = 0; j != NMAX; ++j)
-        ans[j] = find_density_opt_2<double>(a[j], b[j], c[j]);
-}
-
-
-void solve_vec_opt_2() {
-    for (size_t j = 0; j != NMAXVEC; ++j)
-        ansvec[j] = find_density_opt_2<Vec4d>(avec[j], bvec[j], cvec[j]);
-}
-
-
-template<class TFunction>
-double get_time_of(TFunction Function) {
-    auto start = std::chrono::system_clock::now();
-    for (size_t i = 0; i != LOOPS; ++i)
-        (Function)();
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end-start;
-    return elapsed_seconds.count();
-}
-
-
 template<class TVector, class TFunction, class TContainer>
-double get_time_of_2(TFunction method_of_compute, ContainerEnvironment<TContainer> &container_to_store, int loops) {
+double get_time_of_2(TFunction method_of_compute, ContainerEnvironment<TContainer> &container_to_store, size_t loops) {
     auto start = std::chrono::system_clock::now();
 
     for (size_t i = 0; i != loops; ++i) {
@@ -136,38 +57,33 @@ int main() {
 
     // Uninitialized record type
     ContainerEnvironment<double> cont;
-    cont.ptr_to_demension = c;
+    cont.ptr_to_dimension = c;
     cont.ptr_to_arg = a;
     cont.ptr_to_mean = b;
     cont.ptr_to_result = ans;
     cont.size_arg_result = 500;
-    cont.size_mean_demen = 2500;
+    cont.size_mean_dimension = 2500;
 
-    std::cout << "density_opt_0 time = " << get_time_of(solve_opt_0) << std::endl;
-    std::cout << "global_density_opt_0 time = " << get_time_of_2<double>(find_density_opt_0<double>, cont, 1) << std::endl;
+    size_t number_of_loops = 1;
 
-    std::cout << "density_vec_opt_0 time = " << get_time_of(solve_vec_opt_0) << std::endl;
-    std::cout << "global_density_vec_opt_0 time = " << get_time_of_2<Vec4d>(find_density_opt_0<Vec4d>, cont, 1) << std::endl;
+    std::cout << "global_density_opt_0 time = "
+              << get_time_of_2<double>(find_density_opt_0<double>, cont, number_of_loops) << std::endl;
 
+    std::cout << "global_density_vec_opt_0 time = "
+              << get_time_of_2<Vec4d>(find_density_opt_0<Vec4d>, cont, number_of_loops) << std::endl;
 
-    std::cout << "density_opt_1 time = " << get_time_of(solve_opt_1) << std::endl;
-    std::cout << "global_density_opt_1 time = " << get_time_of_2<double>(find_density_opt_1<double>, cont, 1) << std::endl;
+    std::cout << "global_density_opt_1 time = "
+              << get_time_of_2<double>(find_density_opt_1<double>, cont, number_of_loops) << std::endl;
 
-    std::cout << "density_vec_opt_unroll_1 time = " << get_time_of(solve_vec_opt_unroll_1) << std::endl;
-    std::cout << "global_density_vec_opt_1 time = " << get_time_of_2<Vec4d>(find_density_opt_1<Vec4d>, cont, 1) << std::endl;
+    std::cout << "global_density_vec_opt_1 time = "
+              << get_time_of_2<Vec4d>(find_density_opt_1<Vec4d>, cont, number_of_loops) << std::endl;
 
+    std::cout << "global_density_opt_2 time = "
+              << get_time_of_2<double>(find_density_opt_2<double>, cont, number_of_loops) << std::endl;
 
-    std::cout << "density_vec_opt_1 time = " << get_time_of(solve_vec_opt_1) << std::endl;
-    std::cout << "minus_density_opt_1 time = " << get_time_of(solve_what_opt_1) << std::endl;
-    std::cout << "density_direct_opt_1 time = " << get_time_of(solve_direct_opt_1) << std::endl;
+    std::cout << "global_density_vec_opt_2 time = "
+              << get_time_of_2<Vec4d>(find_density_opt_2<Vec4d>, cont, number_of_loops) << std::endl;
 
-
-    std::cout << "density_opt_2 time = " << get_time_of(solve_opt_2) << std::endl;
-    std::cout << "global_density_opt_2 time = " << get_time_of_2<double>(find_density_opt_2<double>, cont, 1) << std::endl;
-
-    std::cout << "density_vec_opt_2 time = " << get_time_of(solve_vec_opt_2) << std::endl;
-    std::cout << "global_density_vec_opt_2 time = " << get_time_of_2<Vec4d>(find_density_opt_2<Vec4d>, cont, 1) << std::endl;
-    
     return 0;
 }
 
