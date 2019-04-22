@@ -15,8 +15,9 @@ double fRand(double fMin, double fMax) {
     return fMin + f * (fMax - fMin);
 }
 
+constexpr const size_t shift_vec = 4;
 constexpr const size_t NMAX = 25000;
-constexpr const size_t NMAXVEC = NMAX / 4;
+constexpr const size_t NMAXVEC = NMAX / shift_vec;
 
 double a[NMAX + 10], b[NMAX + 10], c[NMAX + 10];
 double ans[NMAX + 10];
@@ -31,7 +32,7 @@ void init() {
         c[i] = fRand(L, R);
     }
     size_t index = 0;
-    for (size_t j = 0; j < NMAX; j += 4, ++index) {
+    for (size_t j = 0; j < NMAX; j += shift_vec, ++index) {
         avec[index].load(&a[j]);
         bvec[index].load(&b[j]);
         cvec[index].load(&c[j]);
